@@ -2,7 +2,7 @@ import AppRegistration from '@mui/icons-material/AppRegistration'
 import '../Auth.css';
 import { useState } from 'react';
 
-function Registration() {
+function Registration({handleAddUser}) {
 
     const [formData, setFormData] = useState({
         first_name: '',
@@ -46,7 +46,14 @@ function Registration() {
         setErrors(newErrors);
 
         if (Object.keys(newErrors).length === 0) {
-            // Submit form
+            handleAddUser(formData);
+            setFormData({
+                first_name: '',
+                last_name: '',
+                email_address_reg: '',
+                password_reg: '',
+                confirm_password_reg: ''
+            });
         }
     }
 

@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import LoginIcon from '@mui/icons-material/Login';
 
-function Login() {
+function Login({users}) {
 
     const [formData, setFormData] = useState({
         email_address: '',
@@ -9,6 +9,8 @@ function Login() {
     })
 
     const [errors, setErrors] = useState({});
+
+    const [welcomeMessage, setWelcomeMessage] = useState('');
 
     const handleChange = (e) => {
         const {name, value} = e.target;
@@ -36,7 +38,22 @@ function Login() {
         setErrors(newErrors);
 
         if (Object.keys(newErrors).length === 0) {
-            // Submit form
+            if(users.length === 0){
+                setWelcomeMessage("No registered users :(");
+                return;
+            }
+
+            const user = users.find(user => user.email_address_reg === formData.email_address && user.password_reg === formData.password);
+
+            if (user) {
+                setWelcomeMessage(`Welcome, ${user.first_name} ${user.last_name}!`);
+                setFormData({
+                    email_address: '',
+                    password: ''
+                })
+            } else {
+                setWelcomeMessage("Invalid email or password");
+            }
         }
     }
 
@@ -46,6 +63,7 @@ function Login() {
                 <LoginIcon fontSize='large'/>
                 Login
             </h2>
+            {welcomeMessage && <div className="alert alert-info" role="alert">{welcomeMessage}</div>}
             <form onSubmit={handleSubmit}>
                 <div className="row">
                     <div className="col-md-8">
